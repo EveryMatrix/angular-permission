@@ -83,8 +83,7 @@
 
                 // If no roles left to validate reject promise
                 if (!currentRole) {
-                  deferred.reject();
-                  return deferred.promise;
+                  return $q.reject();
                 }
                 // Validate role definition exists
                 if (!angular.isFunction(Permission.roleValidations[currentRole])) {
