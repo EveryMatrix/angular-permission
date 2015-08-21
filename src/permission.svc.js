@@ -89,7 +89,7 @@
                 // Validate role definition exists
                 if (!angular.isFunction(Permission.roleValidations[currentRole])) {
                   $log.error('undefined role or invalid role validation');
-                  deferred.reject();
+                  return deferred.reject();
                 }
 
                 var validatingRole = Permission.roleValidations[currentRole](toParams, currentRole);
