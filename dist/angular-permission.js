@@ -243,7 +243,7 @@
         return this;
       };
 
-      this.$get = ['$q', function ($q) {
+      this.$get = ['$q', '$log', function ($q, $log) {
         var asyncRoleList = [$q.resolve()];
         var Permission = {
           asyncRole: function (promise) {
@@ -291,12 +291,12 @@
 
                 // If no roles left to validate reject promise
                 if (!currentRole) {
-                  deferred.reject();
-                  return deferred.promise;
+                  return $q.reject();
                 }
                 // Validate role definition exists
                 if (!angular.isFunction(Permission.roleValidations[currentRole])) {
-                  throw new Error('undefined role or invalid role validation');
+                  $log.error('undefined role or invalid role validation');
+                  return deferred.reject();
                 }
 
                 var validatingRole = Permission.roleValidations[currentRole](toParams, currentRole);
