@@ -36,7 +36,11 @@
       };
 
       this.$get = ['$q', function ($q) {
+        var asyncRoleList = [$q.resolve()];
         var Permission = {
+          asyncRole: function (promise) {
+              asyncRoleList.push(promise);
+          },
           _promiseify: function (value) {
             /**
               Converts a value into a promise, if the value is truthy it resolves it, otherwise
@@ -72,31 +76,33 @@
             }
           },
           _findMatchingRole: function (rolesArray, toParams) {
-            var roles = angular.copy(rolesArray);
             var deferred = $q.defer();
-            var currentRole = roles.shift();
+            $q.all(asyncRoleList).finally(function () {
+                var roles = angular.copy(rolesArray);
+                var currentRole = roles.shift();
 
-            // If no roles left to validate reject promise
-            if (!currentRole) {
-              deferred.reject();
-              return deferred.promise;
-            }
-            // Validate role definition exists
-            if (!angular.isFunction(Permission.roleValidations[currentRole])) {
-              throw new Error('undefined role or invalid role validation');
-            }
+                // If no roles left to validate reject promise
+                if (!currentRole) {
+                  deferred.reject();
+                  return deferred.promise;
+                }
+                // Validate role definition exists
+                if (!angular.isFunction(Permission.roleValidations[currentRole])) {
+                  throw new Error('undefined role or invalid role validation');
+                }
 
-            var validatingRole = Permission.roleValidations[currentRole](toParams, currentRole);
-            validatingRole = Permission._promiseify(validatingRole);
+                var validatingRole = Permission.roleValidations[currentRole](toParams, currentRole);
+                validatingRole = Permission._promiseify(validatingRole);
 
-            validatingRole.then(function () {
-              deferred.resolve();
-            }, function () {
-              Permission._findMatchingRole(roles, toParams).then(function () {
-                deferred.resolve();
-              }, function () {
-                deferred.reject();
-              });
+                validatingRole.then(function () {
+                  deferred.resolve();
+                }, function () {
+                  Permission._findMatchingRole(roles, toParams).then(function () {
+                    deferred.resolve();
+                  }, function () {
+                    deferred.reject();
+                  });
+                });
             });
 
             return deferred.promise;

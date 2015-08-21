@@ -63,7 +63,7 @@ module.exports = function(grunt) {
         files: {
           'dist/<%= pkg.name %>.js': [
             'src/**/*.mdl.js',
-            'src/**/*.drv.js',            
+            'src/**/*.drv.js',
             'src/**/*.svc.js'
           ]
         }
@@ -79,7 +79,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['watch']);
   grunt.registerTask('build', [
-    'karma',
     'clean:dist',
     'concat'
   ]);
