@@ -1,6 +1,30 @@
 {
-  "dependencies": {},
+  "name": "angular-permission",
+  "version": "0.3.1",
+  "authors": [
+    "Rafael Vidaurre <narzerus@gmail.com>"
+  ],
+  "description": "Route permission and access control as simple as it can get",
+  "main": "dist/angular-permission.js",
+  "keywords": [
+    "angular",
+    "permissions",
+    "roles",
+    "route"
+  ],
+  "license": "MIT",
+  "homepage": "http://www.rafaelvidaurre.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "src"
+  ],
   "devDependencies": {
+    "angular": "*",
+    "angular-mocks": "*",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-concat": "^0.4.0",
@@ -17,7 +41,7 @@
     "load-grunt-tasks": "^0.4.0",
     "time-grunt": "^0.3.1"
   },
-  "scripts": {
-    "test": "grunt karma:unit"
+  "dependencies": {
+    "angular-ui-router": "~0.2.11"
   }
 }
